@@ -1,0 +1,165 @@
+<div class="tab comodos flexcol {{#if ativa}}active{{/if}}" data-group="primary" data-tab="comodos">
+
+	<ul class="item-list t20bas-bloco">
+		<li class="item flexrow item-header">
+			<div class="item-name flex2">{{localize "T20BAS.SecaoComodos"}}</div>
+			<div class="item-detail">{{usadas}}/{{vagas}}</div>
+			{{#if construidos.length}}
+				<div class="item-controls flexrow">
+					<a class="item-control" data-action="alternarTodos"
+					   data-tooltip="{{#if algumAberto}}{{localize "T20BAS.RecolherTodos"}}{{else}}{{localize "T20BAS.ExpandirTodos"}}{{/if}}">
+						<i class="fas {{#if algumAberto}}fa-compress-alt{{else}}fa-expand-alt{{/if}}"></i>
+					</a>
+				</div>
+			{{/if}}
+		</li>
+
+		{{#if excedentes}}
+			<li class="item flexrow t20bas-aviso-linha t20bas-alerta-linha">
+				<i class="fas fa-triangle-exclamation noflex"></i>
+				<span>{{localize "T20BAS.AvisoExcedentes" n=excedentes}}</span>
+			</li>
+		{{/if}}
+
+		{{#each construidos}}
+			<li class="item flexrow t20bas-acordeon {{#if this.aberto}}aberto{{/if}} {{#if this.danificado}}indisponivel{{/if}}">
+
+				<div class="item-name flexrow flex2 t20bas-cabeca" data-action="alternar" data-id="{{this.id}}">
+					<i class="fas fa-chevron-right t20bas-seta noflex"></i>
+					<span class="t20bas-vaga-nivel noflex">{{this.vaga}}</span>
+					<div class="item-image noflex" style="background-image: url('{{this.icone}}')"></div>
+					<label>{{this.nome}}</label>
+					{{#if this.danificado}}<span class="tag alerta noflex"><i class="fas fa-house-crack"></i>{{localize "T20BAS.Danificado"}}</span>{{/if}}
+					{{#if this.daCasa}}<span class="tag noflex">{{localize "T20BAS.DaCasa"}}</span>{{/if}}
+					{{#if this.mobilias.length}}<span class="tag noflex"><i class="fas fa-couch"></i>{{this.mobilias.length}}</span>{{/if}}
+				</div>
+
+				<div class="item-controls flexrow">
+					<a class="item-control" data-action="abrirItem" data-id="{{this.id}}"
+					   data-tooltip="{{localize "T20BAS.AbrirItem"}}"><i class="fas fa-up-right-from-square"></i></a>
+					{{#if ../editavel}}
+						{{#if this.suite}}
+							<a class="item-control" data-action="ocupantes" data-id="{{this.id}}"
+							   data-tooltip="{{localize "T20BAS.EscolherOcupantes"}}"><i class="fas fa-bed"></i></a>
+						{{/if}}
+						{{#if this.danificado}}
+							<a class="item-control" data-action="reparar" data-id="{{this.id}}"
+							   data-tooltip="{{localize "T20BAS.BotaoReparar"}}"><i class="fas fa-screwdriver-wrench"></i></a>
+						{{else if ../ehMestre}}
+							<a class="item-control" data-action="danificar" data-id="{{this.id}}"
+							   data-tooltip="{{localize "T20BAS.BotaoDanificar"}}"><i class="fas fa-house-crack"></i></a>
+						{{/if}}
+						<a class="item-control" data-action="demolir" data-id="{{this.id}}"
+						   data-tooltip="{{localize "T20BAS.BotaoDemolir"}}"><i class="fas fa-trash"></i></a>
+					{{/if}}
+				</div>
+
+				<div class="item-summary">
+					<p>{{this.efeito}}</p>
+					{{#if this.suite}}
+						<p class="t20bas-escolha-linha"><label>{{localize "T20BAS.Ocupantes"}}:</label>
+							{{#if this.ocupantes}}{{this.ocupantes}}{{else}}{{localize "T20BAS.NinguemAinda"}}{{/if}}</p>
+					{{/if}}
+					{{#if this.travadoPor}}
+						<p class="t20bas-apagado"><i class="fas fa-link"></i> {{localize "T20BAS.ExigidoPor" comodos=this.travadoPor}}</p>
+					{{/if}}
+
+					{{#if this.mobilias.length}}
+						<ul class="t20bas-beneficios">
+							{{#each this.mobilias}}
+								<li class="flexrow">
+									<span class="flex2"><i class="fas fa-couch"></i> <label>{{this.nome}}.</label> {{this.efeito}}
+										{{#if this.escolha}}<em>({{this.escolha}})</em>{{/if}}
+										{{#if this.incompativel}}<span class="tag alerta">{{localize "T20BAS.Incompativel"}}</span>{{/if}}
+									</span>
+									{{#if ../../editavel}}
+										<a class="item-control noflex" data-action="moverMobilia" data-id="{{this.id}}"
+										   data-tooltip="{{localize "T20BAS.BotaoMoverMobilia"}}"><i class="fas fa-arrows-up-down-left-right"></i></a>
+										<a class="item-control noflex" data-action="guardarMobilia" data-id="{{this.id}}"
+										   data-tooltip="{{localize "T20BAS.BotaoGuardarMobilia"}}"><i class="fas fa-box-archive"></i></a>
+									{{/if}}
+								</li>
+							{{/each}}
+						</ul>
+					{{/if}}
+				</div>
+			</li>
+		{{/each}}
+
+		{{#each vazios}}
+			<li class="item flexrow t20bas-vaga" {{#if ../podeConstruir}}data-action="abrirCatalogo" data-modo="comodos"{{/if}}>
+				<div class="item-name flexrow flex2">
+					<i class="fas fa-circle-plus t20bas-seta noflex"></i>
+					<span class="t20bas-vaga-nivel noflex">{{this}}</span>
+					<label>{{localize "T20BAS.VagaLivre"}}</label>
+				</div>
+			</li>
+		{{/each}}
+	</ul>
+
+	{{#if exteriores.length}}
+		<ul class="item-list t20bas-bloco">
+			<li class="item flexrow item-header">
+				<div class="item-name flex2">{{localize "T20BAS.SecaoExterior"}}</div>
+				<div class="item-detail">{{gargulas}}/{{limiteGargulas}}</div>
+			</li>
+			{{#each exteriores}}
+				<li class="item flexrow">
+					<div class="item-name flexrow flex2">
+						<div class="item-image noflex" style="background-image: url('{{this.icone}}')"></div>
+						<label>{{this.nome}}</label>
+					</div>
+					<div class="item-controls flexrow">
+						<a class="item-control" data-action="abrirItem" data-id="{{this.id}}"><i class="fas fa-up-right-from-square"></i></a>
+						{{#if ../editavel}}
+							<a class="item-control" data-action="removerMobilia" data-id="{{this.id}}"
+							   data-tooltip="{{localize "T20BAS.BotaoRemoverMobilia"}}"><i class="fas fa-trash"></i></a>
+						{{/if}}
+					</div>
+				</li>
+			{{/each}}
+		</ul>
+	{{/if}}
+
+	{{#if soltas.length}}
+		<ul class="item-list t20bas-bloco">
+			<li class="item flexrow item-header">
+				<div class="item-name flex2">{{localize "T20BAS.SecaoGuardadas"}}</div>
+			</li>
+			<li class="item flexrow t20bas-aviso-linha">
+				<i class="fas fa-circle-info noflex"></i><span>{{localize "T20BAS.GuardadasNota"}}</span>
+			</li>
+			{{#each soltas}}
+				<li class="item flexrow">
+					<div class="item-name flexrow flex2">
+						<div class="item-image noflex" style="background-image: url('{{this.icone}}')"></div>
+						<label>{{this.nome}}</label>
+					</div>
+					<div class="item-controls flexrow">
+						{{#if ../editavel}}
+							<a class="item-control" data-action="moverMobilia" data-id="{{this.id}}"
+							   data-tooltip="{{localize "T20BAS.BotaoInstalar"}}"><i class="fas fa-arrows-up-down-left-right"></i></a>
+							<a class="item-control" data-action="removerMobilia" data-id="{{this.id}}"
+							   data-tooltip="{{localize "T20BAS.BotaoRemoverMobilia"}}"><i class="fas fa-trash"></i></a>
+						{{/if}}
+					</div>
+				</li>
+			{{/each}}
+		</ul>
+	{{/if}}
+
+	{{#if podeConstruir}}
+		<footer class="t20bas-rodape flexrow">
+			<button type="button" class="t20bas-acao t20bas-principal" data-action="abrirCatalogo" data-modo="comodos"
+			        {{#if semVagas}}{{#unless ehMestre}}disabled{{/unless}}{{/if}}>
+				<i class="fas fa-door-open"></i>
+				{{#if semVagas}}{{localize "T20BAS.SemVagas"}}{{else}}{{localize "T20BAS.BotaoConstruirComodo"}}{{/if}}
+			</button>
+			<button type="button" class="t20bas-acao" data-action="abrirCatalogo" data-modo="mobilias">
+				<i class="fas fa-couch"></i> {{localize "T20BAS.BotaoAdquirirMobilia"}}
+			</button>
+		</footer>
+	{{/if}}
+
+	<p class="t20bas-fonte">{{fonte}}</p>
+</div>

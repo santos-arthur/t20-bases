@@ -1,0 +1,248 @@
+<div class="tab geral flexcol {{#if ativa}}active{{/if}}" data-group="primary" data-tab="geral">
+
+	{{!-- Porte: onde a base está e o que custa dar o próximo passo. O Mestre
+	      vê e ajusta mesmo antes de a base existir em regras. --}}
+	{{#if mostrarPorte}}
+		<ul class="item-list t20bas-bloco">
+			<li class="item flexrow item-header flex-center">{{localize "T20BAS.SecaoPorte"}}</li>
+
+			<li class="item flexcol t20bas-progresso">
+				<div class="t20bas-progresso-topo flexrow">
+					<label>{{localize "T20BAS.PorteDeMaximo" porte=porteNome posicao=posicao total=trilha.length}}</label>
+					<span class="t20bas-porte">{{localize "T20BAS.NComodos" n=capacidade}}</span>
+					{{#if ehMestre}}
+						<span class="t20bas-ajuste" data-tooltip="{{localize "T20BAS.AjustarPorteDica"}}">
+							<a class="item-control {{#unless podeDiminuir}}inativo{{/unless}}" data-action="ajustarPorte" data-delta="-1"><i class="fas fa-minus"></i></a>
+							<a class="item-control {{#unless proximo}}inativo{{/unless}}" data-action="ajustarPorte" data-delta="1"><i class="fas fa-plus"></i></a>
+						</span>
+					{{/if}}
+				</div>
+				<div class="t20bas-trilha">
+					{{#each trilha}}
+						<span class="t20bas-degrau {{#if this.cheio}}cheio{{/if}}"
+						      data-tooltip="{{this.nome}} · {{localize "T20BAS.NComodos" n=this.comodos}}"></span>
+					{{/each}}
+				</div>
+			</li>
+
+			{{#if adquirida}}
+			{{#if proximo}}
+				<li class="item flexrow item-header t20bas-sub">
+					{{localize "T20BAS.ParaChegarAoPorte" porte=proximo.nome}}
+				</li>
+				<li class="item flexrow t20bas-requisito">
+					<div class="item-name flex2"><label>{{localize "T20BAS.ReqTeste"}}</label></div>
+					<div class="item-detail t20bas-valor">{{localize "T20BAS.CD"}} {{cdAmpliacao}}</div>
+				</li>
+				<li class="item flexrow t20bas-requisito">
+					<div class="item-name flex2"><label>{{localize "T20BAS.ReqInvestimento"}}</label></div>
+					<div class="item-detail t20bas-valor">{{custoAmpliacao}}</div>
+				</li>
+				<li class="item flexrow t20bas-requisito">
+					<div class="item-name flex2"><label>{{localize "T20BAS.ReqTempo"}}</label></div>
+					<div class="item-detail t20bas-valor">{{localize "T20BAS.UmaAcao"}}</div>
+				</li>
+				<li class="item flexrow t20bas-requisito">
+					<div class="item-name flex2"><label>{{localize "T20BAS.ReqGanho"}}</label></div>
+					<div class="item-detail t20bas-valor">{{localize "T20BAS.MaisComodos" n=maisComodos}}</div>
+				</li>
+				<li class="item flexrow t20bas-aviso-linha">
+					<i class="fas fa-triangle-exclamation noflex"></i>
+					<span>{{localize "T20BAS.FalharConsome"}}</span>
+				</li>
+			{{else}}
+				<li class="item flexrow t20bas-aviso-linha">
+					<i class="fas fa-crown noflex"></i>
+					<span>{{localize "T20BAS.PorteMaximo"}}</span>
+				</li>
+			{{/if}}
+
+			<li class="item flexrow t20bas-requisito">
+				<label class="checkbox flex2" data-tooltip="{{localize "T20BAS.SitioSagradoDica"}}">
+					<input type="checkbox" data-campo="sitioSagrado" {{#if sitioSagrado}}checked{{/if}}
+					       {{#unless editavel}}disabled{{/unless}} />
+					{{localize "T20BAS.SitioSagrado"}}
+				</label>
+			</li>
+			{{/if}}
+		</ul>
+
+		{{#if adquirida}}{{#if proximo}}
+			<footer class="t20bas-rodape">
+				<button type="button" class="t20bas-acao t20bas-principal" data-action="ampliar"
+				        {{#unless editavel}}disabled{{/unless}}>
+					<i class="fas fa-arrow-up"></i> {{localize "T20BAS.BotaoAmpliarPara" porte=proximo.nome}}
+				</button>
+			</footer>
+		{{/if}}{{/if}}
+
+	{{/if}}
+
+	{{#unless adquirida}}
+		{{!-- Uma base nova ainda não existe em regras: é preciso construí-la,
+		      comprá-la ou recebê-la. --}}
+		<ul class="item-list t20bas-bloco">
+			<li class="item flexrow item-header flex-center">{{localize "T20BAS.SecaoAquisicao"}}</li>
+
+			<li class="item flexrow t20bas-opcao">
+				<div class="item-name flex2">
+					<label>{{localize "T20BAS.OpcaoConstruir"}}</label>
+					<p class="t20bas-explicacao">{{localize "T20BAS.OpcaoConstruirNota" custo=custoConstrucao cd=cdConstrucao}}</p>
+				</div>
+				<div class="item-controls flexrow">
+					<button type="button" class="t20bas-acao t20bas-principal" data-action="construirBase"
+					        {{#unless editavel}}disabled{{/unless}}>
+						<i class="fas fa-trowel-bricks"></i> {{localize "T20BAS.BotaoConstruir"}}
+					</button>
+				</div>
+			</li>
+
+			<li class="item flexrow t20bas-opcao">
+				<div class="item-name flex2">
+					<label>{{localize "T20BAS.OpcaoComprar"}}</label>
+					<p class="t20bas-explicacao">{{localize "T20BAS.OpcaoComprarNota"}}</p>
+				</div>
+				<div class="item-controls flexrow">
+					<button type="button" class="t20bas-acao" data-action="adquirirPronta" data-modo="compra"
+					        {{#unless editavel}}disabled{{/unless}}>
+						<i class="fas fa-coins"></i> {{localize "T20BAS.BotaoComprarPronta"}}
+					</button>
+				</div>
+			</li>
+
+			<li class="item flexrow t20bas-opcao">
+				<div class="item-name flex2">
+					<label>{{localize "T20BAS.OpcaoRecebida"}}</label>
+					<p class="t20bas-explicacao">{{localize "T20BAS.OpcaoRecebidaNota"}}</p>
+				</div>
+				<div class="item-controls flexrow">
+					<button type="button" class="t20bas-acao" data-action="adquirirPronta" data-modo="recebida"
+					        {{#unless editavel}}disabled{{/unless}}>
+						<i class="fas fa-gift"></i> {{localize "T20BAS.BotaoRecebida"}}
+					</button>
+				</div>
+			</li>
+		</ul>
+	{{else}}
+
+		{{!-- Tipo: a forma e a função da base, trocadas só por reforma. --}}
+		<ul class="item-list t20bas-bloco">
+			<li class="item flexrow item-header flex-center">{{localize "T20BAS.SecaoTipo"}}</li>
+			<li class="item flexrow t20bas-opcao">
+				<div class="item-name flex2">
+					{{#if tipo}}
+						<label>{{tipoNome}}</label>
+						<p class="t20bas-explicacao">{{tipo.efeito}}</p>
+					{{else if tipoDaCasa}}
+						<label>{{tipoTexto}}</label>
+						<p class="t20bas-explicacao">{{localize "T20BAS.TipoDaCasa"}}</p>
+					{{else}}
+						<label>{{localize "T20BAS.SemTipo"}}</label>
+					{{/if}}
+				</div>
+				<div class="item-controls flexrow">
+					<button type="button" class="t20bas-acao" data-action="reformar" {{#unless editavel}}disabled{{/unless}}
+					        data-tooltip="{{localize "T20BAS.ReformarDica" custo=custoReforma cd=cdReforma}}">
+						<i class="fas fa-paint-roller"></i> {{localize "T20BAS.BotaoReformar"}}
+					</button>
+				</div>
+			</li>
+
+			{{#if ehEmpreendimento}}{{#if usaNegocios}}
+				{{!-- Regra alternativa: a base conta como um negócio de nível 1 do
+				      módulo t20-negocios, e quem rende é o negócio. --}}
+				<li class="item flexrow t20bas-opcao">
+					<div class="item-name flex2">
+						<label>{{localize "T20BAS.NegocioVinculado"}}</label>
+						{{#if moduloNegociosAtivo}}
+							<p class="t20bas-explicacao">
+								{{#if negocioVinculado}}{{localize "T20BAS.NegocioVinculadoNota" nivel=negocioVinculado.nivel}}
+								{{else if semNegocios}}{{localize "T20BAS.SemNegocios"}}
+								{{else}}{{localize "T20BAS.EscolhaNegocioNota"}}{{/if}}
+							</p>
+							{{#if negocioPerdido}}<p class="t20bas-explicacao t20bas-negativo">{{localize "T20BAS.NegocioPerdido"}}</p>{{/if}}
+
+							{{!-- Na largura toda da linha, e não na coluna dos botões: nome de
+							      negócio costuma ser comprido. --}}
+							<div class="t20bas-negocio-escolha flexrow">
+								<select data-campo="negocio" {{#unless editavel}}disabled{{/unless}}>
+									<option value="">{{localize "T20BAS.NenhumNegocio"}}</option>
+									{{#each negocios}}
+										<option value="{{this.id}}" {{#if this.selecionado}}selected{{/if}}>{{this.nome}} ({{localize "T20BAS.NivelAbrev"}} {{this.nivel}})</option>
+									{{/each}}
+								</select>
+								{{#if negocioVinculado}}
+									<a class="item-control noflex" data-action="abrirNegocio"
+									   data-tooltip="{{localize "T20BAS.AbrirNegocio"}}"><i class="fas fa-shop"></i></a>
+								{{/if}}
+							</div>
+						{{else}}
+							<p class="t20bas-explicacao t20bas-negativo">
+								<i class="fas fa-triangle-exclamation"></i> {{localize "T20BAS.AvisoModuloNegocios"}}
+							</p>
+						{{/if}}
+					</div>
+				</li>
+			{{else}}
+				<li class="item flexrow t20bas-opcao">
+					<div class="item-name flex2">
+						<label>{{localize "T20BAS.Rendimento"}}</label>
+						<p class="t20bas-explicacao">{{localize "T20BAS.RendimentoNota" bonus=bonusEmpreendimento}}</p>
+					</div>
+					<div class="item-controls flexrow">
+						<button type="button" class="t20bas-acao" data-action="apurarEmpreendimento"
+						        {{#unless editavel}}disabled{{/unless}}>
+							<i class="fas fa-coins"></i> {{localize "T20BAS.BotaoApurar"}}
+						</button>
+					</div>
+				</li>
+			{{/if}}{{/if}}
+		</ul>
+
+		{{!-- Segurança e manutenção: o que protege a base e o que custa mantê-la. --}}
+		<ul class="item-list t20bas-bloco">
+			<li class="item flexrow item-header flex-center">{{localize "T20BAS.SecaoDefesa"}}</li>
+
+			<li class="item flexrow t20bas-opcao">
+				<div class="item-name flex2">
+					<label>{{localize "T20BAS.CampoSeguranca"}}</label>
+					<p class="t20bas-explicacao">
+						{{#if semSeguranca}}{{localize "T20BAS.SemSeguranca"}}{{else}}{{invasao}}{{/if}}
+						{{#if seguranca.excedeu}}{{localize "T20BAS.SegurancaLimitada"}}{{/if}}
+					</p>
+				</div>
+				<div class="item-detail t20bas-valor t20bas-destaque">{{seguranca.efetiva}}</div>
+				{{#if ehMestre}}
+					<div class="item-detail t20bas-ajuste-seguranca" data-tooltip="{{localize "T20BAS.SegurancaBaseDica"}}">
+						<input type="number" name="system.seguranca.base" value="{{seguranca.base}}" data-dtype="Number" min="0" />
+					</div>
+				{{/if}}
+			</li>
+
+			<li class="item flexrow t20bas-opcao">
+				<div class="item-name flex2">
+					<label>{{localize "T20BAS.CampoManutencao"}}</label>
+					<p class="t20bas-explicacao">{{localize "T20BAS.ManutencaoNota"}}</p>
+					{{#if danificados}}
+						<p class="t20bas-explicacao t20bas-negativo">{{localize "T20BAS.NDanificados" n=danificados}}</p>
+					{{/if}}
+				</div>
+				<div class="item-detail t20bas-valor t20bas-destaque">{{manutencao}}</div>
+				<div class="item-controls flexrow">
+					<button type="button" class="t20bas-acao" data-action="iniciarAventura"
+					        {{#unless editavel}}disabled{{/unless}}>
+						<i class="fas fa-flag"></i> {{localize "T20BAS.BotaoInicioAventura"}}
+					</button>
+				</div>
+			</li>
+		</ul>
+	{{/unless}}
+
+	<div class="t20bas-anotacoes">
+		<h4 class="box-title">{{localize "T20BAS.SecaoNotas"}}</h4>
+		<textarea name="system.detalhes.biography.value" rows="4" placeholder="{{localize "T20BAS.NotasPlaceholder"}}"
+		          {{#unless editavel}}disabled{{/unless}}>{{notas}}</textarea>
+	</div>
+
+	<p class="t20bas-fonte">{{fonte}}</p>
+</div>

@@ -1,0 +1,74 @@
+<div class="t20bas-seletor flexcol">
+
+	<div class="t20bas-busca-barra flexrow">
+		<div class="t20bas-campo-busca noflex">
+			<i class="fas fa-magnifying-glass" inert></i>
+			<input type="search" name="busca" value="{{filtro.texto}}" placeholder="{{localize "T20BAS.Buscar"}}" />
+		</div>
+		<button type="button" class="t20bas-acao {{#if filtro.soDisponiveis}}t20bas-ligado{{/if}}"
+		        data-action="alternarDisponiveis">
+			<i class="fas {{#if filtro.soDisponiveis}}fa-square-check{{else}}fa-square{{/if}}"></i>
+			{{localize "T20BAS.SoDisponiveis"}}
+		</button>
+	</div>
+
+	<p class="t20bas-aviso">{{resumo}}</p>
+
+	<ul class="item-list t20bas-bloco">
+		{{#if semResultado}}
+			<li class="item flexrow t20bas-aviso-linha">
+				<i class="fas fa-magnifying-glass noflex"></i>
+				<span>{{localize "T20BAS.NadaEncontrado"}}</span>
+			</li>
+		{{/if}}
+
+		{{#each itens}}
+			<li class="item flexrow t20bas-acordeon {{#if this.aberto}}aberto{{/if}}
+			           {{#unless this.disponivel}}indisponivel{{/unless}}" data-id="{{this.id}}">
+
+				<div class="item-name flexrow flex2 t20bas-cabeca" data-action="alternarDetalhe" data-id="{{this.id}}">
+					<i class="fas fa-chevron-right t20bas-seta noflex"></i>
+					<div class="item-image noflex" style="background-image: url('{{this.icone}}')"></div>
+					<label>{{this.nome}}</label>
+				</div>
+
+				<div class="item-controls flexrow">
+					{{#if this.disponivel}}
+						<button type="button" class="t20bas-acao" data-action="escolher" data-id="{{this.id}}">
+							<i class="fas fa-plus"></i> {{this.rotuloAcao}}
+						</button>
+					{{else}}
+						<span class="tag alerta t20bas-estado"><i class="fas fa-lock"></i>
+							{{#if this.requisitos}}{{this.requisitos}}{{else}}{{localize "T20BAS.SemVagas"}}{{/if}}</span>
+					{{/if}}
+					{{!-- O Mestre põe o que quiser, sem teste, custo ou pré-requisito. --}}
+					{{#if ../ehMestre}}
+						<button type="button" class="t20bas-acao" data-action="adicionarSemTeste" data-id="{{this.id}}"
+						        data-tooltip="{{localize "T20BAS.AdicionarLivreDica"}}">
+							<i class="fas fa-wand-magic-sparkles"></i> {{localize "T20BAS.BotaoAdicionarLivre"}}
+						</button>
+					{{/if}}
+				</div>
+
+				<div class="item-summary">
+					<p class="t20bas-resumo">{{this.resumo}}</p>
+					<p><label>{{localize "T20BAS.Efeito"}}</label> {{this.efeito}}</p>
+					{{#if this.disponivel}}{{#if this.requisitos}}
+						<p class="t20bas-apagado">{{this.requisitos}}</p>
+					{{/if}}{{/if}}
+					{{#if this.semDestino}}<p class="t20bas-apagado">{{localize "T20BAS.SemDestino"}}</p>{{/if}}
+					{{#if this.nota}}<p class="t20bas-apagado"><i class="fas fa-circle-info"></i> {{this.nota}}</p>{{/if}}
+					{{#if this.marcas.length}}
+						<div class="t20bas-marcas">
+							{{#each this.marcas}}
+								<span class="tag {{this.estilo}}"{{#if this.dica}} data-tooltip="{{this.dica}}"{{/if}}>{{#if this.icone}}<i class="fas {{this.icone}}"></i>{{/if}}{{this.texto}}</span>
+							{{/each}}
+						</div>
+					{{/if}}
+				</div>
+			</li>
+		{{/each}}
+	</ul>
+
+	<p class="t20bas-fonte">{{fonte}}</p>
+</div>

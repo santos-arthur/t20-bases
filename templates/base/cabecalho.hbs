@@ -1,0 +1,67 @@
+<header class="sheet-header flexrow">
+	<img class="profile" src="{{base.img}}" title="{{base.name}}" data-edit="img"
+	     {{#if editavel}}data-action="editImage"{{/if}} />
+
+	{{!-- Esta coluna tem exatamente a altura da imagem: nome, números e
+	      identificação dividem o espaço entre si. --}}
+	<section class="header-details flexcol">
+		<div class="general-information flexrow">
+			<h1 class="charname">
+				<input name="name" type="text" value="{{base.name}}"
+				       placeholder="{{localize "T20BAS.ExemploNome"}}" {{#unless editavel}}disabled{{/unless}} />
+			</h1>
+		</div>
+
+		<ul class="attributes flexrow">
+			<li class="attribute flexcol">
+				<h4 class="attribute-name box-title">{{localize "T20BAS.CampoPorte"}}</h4>
+				<div class="attribute-value">
+					{{!-- O Mestre muda o porte à vontade, sem teste nem custo; para os
+					      demais é só leitura, porque crescer é o teste da Visão geral. --}}
+					{{#if ehMestre}}
+						<select data-campo="porte" class="t20bas-porte-editavel"
+						        data-tooltip="{{localize "T20BAS.AjustarPorteDica"}}">
+							{{#each portes}}
+								<option value="{{this.id}}" {{#if this.selecionado}}selected{{/if}}>{{this.nome}}</option>
+							{{/each}}
+						</select>
+					{{else}}
+						{{porteNome}}
+					{{/if}}
+				</div>
+			</li>
+
+			<li class="attribute flexcol">
+				<h4 class="attribute-name box-title">{{localize "T20BAS.ComodosConstruidos"}}</h4>
+				<div class="attribute-value">{{leitura.usados}}<span class="sep">/</span>{{leitura.capacidade}}</div>
+			</li>
+
+			<li class="attribute flexcol">
+				<h4 class="attribute-name box-title">{{localize "T20BAS.CampoSeguranca"}}</h4>
+				<div class="attribute-value" data-tooltip="{{segurancaDica}}">{{leitura.seguranca.efetiva}}</div>
+			</li>
+
+			<li class="attribute flexcol">
+				<h4 class="attribute-name box-title">{{localize "T20BAS.CampoManutencao"}}</h4>
+				<div class="attribute-value">{{manutencao}}</div>
+			</li>
+		</ul>
+
+		<ul class="attributes summary flexrow">
+			<li>
+				<label class="t20bas-rotulo">{{localize "T20BAS.CampoTipo"}}</label>
+				<span class="t20bas-texto-campo">{{tipoNome}}</span>
+			</li>
+			<li>
+				<label class="t20bas-rotulo">{{localize "T20BAS.CampoProprietario"}}</label>
+				<select data-campo="proprietario" {{#unless ehMestre}}disabled{{/unless}}
+				        data-tooltip="{{localize "T20BAS.ProprietarioDica"}}">
+					<option value="">{{localize "T20BAS.SemProprietario"}}</option>
+					{{#each proprietariosPossiveis}}
+						<option value="{{this.id}}" {{#if this.selecionado}}selected{{/if}}>{{this.nome}}</option>
+					{{/each}}
+				</select>
+			</li>
+		</ul>
+	</section>
+</header>

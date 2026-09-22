@@ -1,0 +1,45 @@
+<div class="tab registro flexcol {{#if ativa}}active{{/if}}" data-group="primary" data-tab="registro">
+
+	<ul class="item-list t20bas-bloco">
+		<li class="item flexrow item-header">
+			<div class="item-name flex2">{{localize "T20BAS.SecaoRegistro"}}</div>
+			<div class="item-detail">{{localize "T20BAS.ContagemEventos" total=total}}</div>
+			<div class="item-controls flexrow">
+				{{#if editavel}}
+					<a class="item-control" data-action="adicionarNota"
+					   data-tooltip="{{localize "T20BAS.BotaoAdicionarNota"}}"><i class="fas fa-feather"></i></a>
+					<a class="item-control t20bas-excluir" data-action="limparRegistro"
+					   data-tooltip="{{localize "T20BAS.BotaoLimparRegistro"}}"><i class="fas fa-eraser"></i></a>
+				{{/if}}
+			</div>
+		</li>
+
+		{{#if vazio}}
+			<li class="item flexcol t20bas-nenhum">
+				<i class="fas fa-scroll"></i>
+				<p><strong>{{localize "T20BAS.RegistroVazio"}}</strong></p>
+				<p>{{localize "T20BAS.RegistroVazioDica"}}</p>
+			</li>
+		{{/if}}
+
+		{{!-- Agrupado por dia: uma base atravessa muitas aventuras, e ver as
+		      sessões separadas ajuda a lembrar o que aconteceu em cada uma. --}}
+		{{#each dias}}
+			<li class="item flexrow item-header t20bas-sub t20bas-dia">
+				<span>{{this.data}}</span>
+			</li>
+
+			{{#each this.entradas}}
+				<li class="item flexrow t20bas-evento t20bas-evento-{{this.tipo}}">
+					<div class="item-name flexrow flex2">
+						<div class="item-image noflex"><i class="fas {{this.icone}}"></i></div>
+						<label>{{this.texto}}</label>
+					</div>
+					<div class="item-detail t20bas-hora">{{this.hora}}</div>
+				</li>
+			{{/each}}
+		{{/each}}
+	</ul>
+
+	<p class="t20bas-fonte">{{fonte}}</p>
+</div>

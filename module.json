@@ -1,0 +1,63 @@
+{
+  "id": "t20-bases",
+  "title": "Bases — Tormenta 20",
+  "description": "Implementa as regras de Bases de Tormenta20 - Heróis de Arton sobre a base nativa do sistema Tormenta20: construção, porte, cômodos, mobílias, segurança, manutenção e os benefícios aplicados nas fichas dos residentes. Regras da Jambô Editora. Módulo de fã, não oficial.",
+  "version": "0.1.0",
+  "authors": [
+    {
+      "name": "Arthur Vilmar dos Santos",
+      "url": "https://github.com/santos-arthur"
+    }
+  ],
+  "license": "MIT",
+  "url": "https://github.com/santos-arthur/t20-bases",
+  "readme": "https://github.com/santos-arthur/t20-bases#readme",
+  "bugs": "https://github.com/santos-arthur/t20-bases/issues",
+  "changelog": "https://github.com/santos-arthur/t20-bases/releases",
+  "manifest": "https://github.com/santos-arthur/t20-bases/releases/latest/download/module.json",
+  "download": "https://github.com/santos-arthur/t20-bases/releases/download/v0.1.0/module.zip",
+  "compatibility": {
+    "minimum": "14",
+    "verified": "14"
+  },
+  "relationships": {
+    "requires": [],
+    "systems": [
+      {
+        "id": "tormenta20",
+        "type": "system",
+        "compatibility": {
+          "minimum": "1.6"
+        }
+      }
+    ]
+  },
+  "esmodules": [
+    "scripts/main.mjs"
+  ],
+  "styles": [
+    "styles/bases.css"
+  ],
+  "languages": [
+    {
+      "lang": "pt-BR",
+      "name": "Português (Brasil)",
+      "path": "lang/pt-BR.json"
+    }
+  ],
+  "socket": true,
+  "flags": {
+    "hotReload": {
+      "extensions": [
+        "css",
+        "hbs",
+        "json"
+      ],
+      "paths": [
+        "styles",
+        "templates",
+        "lang"
+      ]
+    }
+  }
+}
